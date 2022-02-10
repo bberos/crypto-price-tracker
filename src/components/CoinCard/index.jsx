@@ -17,17 +17,17 @@ export default function index({ marketCoin }) {
   } = marketCoin;
   const navigation = useNavigation();
   const normalizeMarketCap = (marketCap) => {
-    if (marketCap > 1_000_000_000_000) {
-      return `${Math.floor(marketCap / 1_000_000_000_000)} T`;
+    if (marketCap > 1e12) {
+      return `${Math.floor(marketCap / 1e12)} T`;
     }
-    if (marketCap > 1_000_000_000) {
-      return `${Math.floor(marketCap / 1_000_000_000)} B`;
+    if (marketCap > 1e9) {
+      return `${Math.floor(marketCap / 1e9)} B`;
     }
-    if (marketCap > 1_000_000) {
-      return `${Math.floor(marketCap / 1_000_000)} M`;
+    if (marketCap > 1e6) {
+      return `${Math.floor(marketCap / 1e6)} M`;
     }
-    if (marketCap > 1_000_000_000) {
-      return `${Math.floor(marketCap / 1_000)} K`;
+    if (marketCap > 1e3) {
+      return `${Math.floor(marketCap / 1e3)} K`;
     }
     return marketCap;
   };
