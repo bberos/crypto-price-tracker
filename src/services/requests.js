@@ -43,3 +43,14 @@ export const getFavouritesCoins = async (page = 1, coinIds) => {
     console.log(e);
   }
 };
+
+export const getAllCoins = async () => {
+  try {
+    const response = await axios.get(
+      `https://api.coingecko.com/api/v3/coins/list?include_platform=false`
+    );
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
+};
