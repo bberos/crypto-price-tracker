@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   valueChange: {
-    color: "white",
     fontWeight: "600",
     fontSize: 16,
   },
@@ -35,7 +34,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 5,
     borderRadius: 5,
-    backgroundColor: "#16c784",
   },
   assetsTitle: {
     color: "white",
