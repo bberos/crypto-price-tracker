@@ -3,29 +3,58 @@ import React from "react";
 import styles from "./styles";
 import { AntDesign } from "@expo/vector-icons";
 
-export default function PortfolioItem() {
+export default function PortfolioItem({ item }) {
+  console.log("🚀 ~ file: index.jsx ~ line 7 ~ PortfolioItem ~ item", item);
+  const {
+    currentPrice,
+    image,
+    name,
+    priceBought,
+    priceChangePercentage,
+    quantityBought,
+    ticker,
+  } = item;
+
+  const isChangePositive = () => {
+    priceChangePercentage >= 0;
+  };
+
+  const renderHoldings = () => (quantityBought * currentPrice).toFixed(2);
+
   return (
     <View style={styles.itemContainer}>
-      <Image source={{ uri: "" }} style={{ height: 30, width: 30 }} />
+      <Image
+        source={{ uri: image }}
+        style={{ height: 30, width: 30, marginRight: 10, alignSelf: "center" }}
+      />
       <View>
-        <Text style={styles.coinName}>Bitcoin</Text>
-        <Text style={styles.coinCode}>BTC</Text>
+        <Text style={styles.coinName}>{name}</Text>
+        <Text style={styles.coinCode}>{ticker}</Text>
       </View>
       <View style={{ marginLeft: "auto" }}>
-        <Text style={styles.coinName}>$4000</Text>
+        <Text style={styles.coinName}>${currentPrice}</Text>
         <View style={{ flexDirection: "row" }}>
           <AntDesign
-            name={"caretup"}
+            name={isChangePositive() ? "caretup" : "caretdown"}
             size={12}
-            color="#16c784"
+            color={isChangePositive() ? "#16c784" : "#ea3943"}
             style={{ alignSelf: "center", marginRight: 5 }}
           />
-          <Text style={{ color: "#16c784", fontWeight: "600" }}>1.2%</Text>
+          <Text
+            style={{
+              color: isChangePositive() ? "#16c784" : "#ea3943",
+              fontWeight: "600",
+            }}
+          >
+            {priceChangePercentage.toFixed(2)}%
+          </Text>
         </View>
       </View>
       <View style={styles.quantityContainer}>
-        <Text style={styles.coinName}>$44973</Text>
-        <Text style={styles.coinCode}>1 BTC</Text>
+        <Text style={styles.coinName}>${renderHoldings()}</Text>
+        <Text style={styles.coinCode}>
+          {quantityBought} {ticker}
+        </Text>
       </View>
     </View>
   );
