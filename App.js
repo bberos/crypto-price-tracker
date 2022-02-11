@@ -3,6 +3,8 @@ import { StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import Navigation from "./src/navigation";
 import FavouritesProvider from "./src/context/FavouritesProvider";
+import { RecoilRoot } from "recoil";
+
 export default function App() {
   return (
     <NavigationContainer
@@ -12,12 +14,14 @@ export default function App() {
         },
       }}
     >
-      <FavouritesProvider>
-        <View style={styles.container}>
-          <Navigation />
-          <StatusBar style="light" />
-        </View>
-      </FavouritesProvider>
+      <RecoilRoot>
+        <FavouritesProvider>
+          <View style={styles.container}>
+            <Navigation />
+            <StatusBar style="light" />
+          </View>
+        </FavouritesProvider>
+      </RecoilRoot>
     </NavigationContainer>
   );
 }
