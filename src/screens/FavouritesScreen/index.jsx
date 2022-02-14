@@ -20,7 +20,9 @@ export default function index() {
     setIsLoading(false);
   };
   useEffect(() => {
-    fetchFavouritesCoins();
+    if (favouritesCoinIds.length > 0) {
+      fetchFavouritesCoins();
+    }
   }, [favouritesCoinIds]);
 
   return (
