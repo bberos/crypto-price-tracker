@@ -4,7 +4,6 @@ import styles from "./styles";
 import { AntDesign } from "@expo/vector-icons";
 
 export default function PortfolioItem({ item }) {
-  console.log("🚀 ~ file: index.jsx ~ line 7 ~ PortfolioItem ~ item", item);
   const {
     currentPrice,
     image,
@@ -31,7 +30,7 @@ export default function PortfolioItem({ item }) {
         <Text style={styles.coinName}>{name}</Text>
         <Text style={styles.coinCode}>{ticker}</Text>
       </View>
-      <View style={{ marginLeft: "auto" }}>
+      <View style={{ marginLeft: "auto", alignItems: "flex-end" }}>
         <Text style={styles.coinName}>${currentPrice}</Text>
         <View style={{ flexDirection: "row" }}>
           <AntDesign
@@ -46,7 +45,7 @@ export default function PortfolioItem({ item }) {
               fontWeight: "600",
             }}
           >
-            {priceChangePercentage.toFixed(2)}%
+            {priceChangePercentage?.toFixed(2)}%
           </Text>
         </View>
       </View>
