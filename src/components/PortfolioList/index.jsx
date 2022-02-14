@@ -49,7 +49,7 @@ export default function PortfolioList() {
             <View>
               <Text style={styles.currentBalance}>Current Balance</Text>
               <Text style={styles.currentBalanceValue}>
-                ${getCurrentBalance()}
+                ${getCurrentBalance().toFixed(2)}
               </Text>
               <Text
                 style={{
