@@ -10,7 +10,13 @@ export default function index(props) {
     // Worklet for formatting data from the chart. It can be useful when your data is a timestamp or currency.
     "worklet";
     if (value === "") {
+      if (currentPrice.usd < 1) {
+        return `$${currentPrice.usd}`;
+      }
       return `$${currentPrice.usd.toFixed(2)}`;
+    }
+    if (currentPrice.usd < 1) {
+      return `$${parseFloat(value)}`;
     }
     return `$${parseFloat(value).toFixed(2)}`;
   };
