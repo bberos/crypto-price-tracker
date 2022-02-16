@@ -5,6 +5,8 @@ import {
   Dimensions,
   TextInput,
   ActivityIndicator,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import {
   ChartDot,
@@ -19,12 +21,22 @@ import {
   getDetailedCoinData,
   getCoinMarketChart,
 } from "./../../services/requests";
+import Filter from "../../components/CoinDetail/Filter";
+
+const filterDaysArray = [
+  { filterDay: "1", filterText: "24h" },
+  { filterDay: "7", filterText: "7d" },
+  { filterDay: "30", filterText: "30d" },
+  { filterDay: "365", filterText: "1y" },
+  { filterDay: "max", filterText: "All" },
+];
 export default function index() {
   const [coin, setCoin] = useState(null);
   const [coinMarketData, setCoinMarketData] = useState(null);
   const [coinValue, setCoinValue] = useState("1");
   const [usdValue, setUsdValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedRange, setSelectedRange] = useState("1");
   const route = useRoute();
   const {
     params: { coinId },
@@ -32,15 +44,22 @@ export default function index() {
   const fetchCoinData = async () => {
     setIsLoading(true);
     const fetchedCoinData = await getDetailedCoinData(coinId);
-    const fetchedCoinMarketData = await getCoinMarketChart(coinId);
     setCoin(fetchedCoinData);
-    setCoinMarketData(fetchedCoinMarketData);
     setUsdValue(fetchedCoinData.market_data.current_price.usd.toString());
     setIsLoading(false);
   };
 
+  const fetchMarketCoinData = async (selectedRangeValue) => {
+    const fetchedCoinMarketData = await getCoinMarketChart(
+      coinId,
+      selectedRangeValue
+    );
+    setCoinMarketData(fetchedCoinMarketData);
+  };
+
   useEffect(() => {
     fetchCoinData();
+    fetchMarketCoinData(1);
   }, []);
   const screenWidth = Dimensions.get("window").width;
   // Si la moneda dropeo al principio de las 24hs stroke=red : stroke=green
@@ -72,13 +91,22 @@ export default function index() {
     const floatValue = parseFloat(value.replace(",", ".")) || 0;
     setCoinValue((floatValue / current_price.usd).toString());
   };
+
+  const handlerSelectedRange = (selectedRangeValue) => {
+    setSelectedRange(selectedRangeValue);
+    fetchMarketCoinData(selectedRangeValue);
+  };
   return (
-    <View style={styles.container}>
+    <TouchableWithoutFeedback
+      style={styles.container}
+      onPress={Keyboard.dismiss}
+      accessible={false}
+    >
       <ChartPathProvider
         data={{
           // points: prices.map((price) => ({ x: price[0], y: price[1] })),
           points: prices.map(([x, y]) => ({ x, y })),
-          smoothingStrategy: "bezier",
+          // smoothingStrategy: "bezier",
         }}
       >
         <CoinDetailHeader
@@ -92,6 +120,19 @@ export default function index() {
           currentPrice={current_price}
           priceChangePercentage24h={price_change_percentage_24h}
         />
+        {/* CHART FILTER START */}
+        <View style={styles.filterContainer}>
+          {filterDaysArray.map((day) => (
+            <Filter
+              key={day.filterDay}
+              filterDay={day.filterDay}
+              filterText={day.filterText}
+              selectedRange={selectedRange}
+              setSelectedRange={handlerSelectedRange}
+            />
+          ))}
+        </View>
+        {/* CHART FILTER END */}
         {/* CHART COMPONENT START */}
         <View>
           <ChartPath
@@ -103,7 +144,7 @@ export default function index() {
         </View>
         {/* CHART COMPONENT END */}
         {/* PRICE CONVERTER CONTAINER START */}
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", marginHorizontal: 10 }}>
           {/* importante agregar el flex 1 tanto aca como en el text input para que en todas las pantallas se vea bien el width del border */}
           <View style={{ flexDirection: "row", flex: 1 }}>
             <Text style={{ color: "white", alignSelf: "center" }}>
@@ -130,6 +171,6 @@ export default function index() {
         </View>
         {/* PRICE CONVERTER CONTAINER END */}
       </ChartPathProvider>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
