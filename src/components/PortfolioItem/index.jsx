@@ -20,6 +20,15 @@ export default function PortfolioItem({ item }) {
 
   const renderHoldings = () => (quantityBought * currentPrice).toFixed(2);
 
+  const formatText = (name) => {
+    if (name.length >= 11) {
+      const result = name.slice(0, 11);
+      const fixedName = result + "...";
+      return fixedName;
+    }
+    return name;
+  };
+
   return (
     <View style={styles.itemContainer}>
       <Image
@@ -27,7 +36,7 @@ export default function PortfolioItem({ item }) {
         style={{ height: 30, width: 30, marginRight: 10, alignSelf: "center" }}
       />
       <View>
-        <Text style={styles.coinName}>{name}</Text>
+        <Text style={styles.coinName}>{formatText(name)}</Text>
         <Text style={styles.coinCode}>{ticker}</Text>
       </View>
       <View style={{ marginLeft: "auto", alignItems: "flex-end" }}>
