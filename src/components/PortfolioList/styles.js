@@ -55,6 +55,14 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "600",
   },
+  deleteButtonContainer: {
+    flex: 1,
+    backgroundColor: "#EA3943",
+    alignItems: "flex-end",
+    justifyContent: "center",
+    paddingRight: 25,
+    marginLeft: 20,
+  },
 });
 
 export default styles;
