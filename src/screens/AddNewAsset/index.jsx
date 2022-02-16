@@ -59,6 +59,8 @@ export default function AddNewAssetScreen() {
   const handlerNewAsset = async () => {
     const newAsset = {
       id: selectedCoin.id,
+      //to do : here implement uuid
+      unique_id: selectedCoin.id + Math.random(0, 1e6),
       name: selectedCoin.name,
       image: selectedCoin.image.small,
       ticker: selectedCoin.symbol.toUpperCase(),
