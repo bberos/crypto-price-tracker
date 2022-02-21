@@ -3,7 +3,7 @@ import { FlatList, RefreshControl } from "react-native";
 import { useFavourites } from "./../../context/FavouritesProvider";
 import CoinCard from "./../../components/CoinCard";
 import { getFavouritesCoins } from "./../../services/requests";
-export default function index() {
+export default function Favourites() {
   const { favouritesCoinIds } = useFavourites();
   const [coins, setCoins] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
