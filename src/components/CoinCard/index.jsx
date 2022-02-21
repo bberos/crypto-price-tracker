@@ -32,6 +32,10 @@ export default function index({ marketCoin }) {
     return marketCap;
   };
 
+  const formatCurrentPrice = () => {
+    const totalFixed = new Intl.NumberFormat().format(current_price);
+    return totalFixed;
+  };
   const percentageColor =
     price_change_percentage_24h < 0 ? "#ea3943" : "#16c784" || "white";
   return (
@@ -64,7 +68,7 @@ export default function index({ marketCoin }) {
         </View>
       </View>
       <View style={styles.lastColumn}>
-        <Text style={styles.price}>{current_price}</Text>
+        <Text style={styles.price}>${formatCurrentPrice()}</Text>
         <Text style={styles.mcap}>MCap {normalizeMarketCap(market_cap)}</Text>
       </View>
     </Pressable>
