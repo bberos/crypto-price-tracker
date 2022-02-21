@@ -16,6 +16,7 @@ export default function BottomTabNavigator() {
         tabBarInactiveTintColor: "grey",
         tabBarStyle: {
           backgroundColor: "#181818",
+          paddingBottom: 2,
         },
       }}
     >
