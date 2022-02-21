@@ -3,6 +3,19 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
   },
+  priceConverterContainer: {
+    borderTopWidth: 1,
+    borderTopColor: "#2b2b2b",
+    marginTop: 10,
+  },
+  priceConverterTitle: {
+    marginTop: 10,
+    paddingHorizontal: 10,
+    color: "white",
+    fontFamily: "DriodSans",
+    fontSize: 16,
+    fontWeight: "600",
+  },
   input: {
     flex: 1,
     width: 130,
