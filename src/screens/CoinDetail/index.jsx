@@ -5,14 +5,15 @@ import {
   Dimensions,
   TextInput,
   ActivityIndicator,
-  TouchableWithoutFeedback,
-  Keyboard,
+  Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import {
   ChartDot,
   ChartPath,
   ChartPathProvider,
 } from "@rainbow-me/animated-charts";
+import { LineChart, LineChartProvider } from "react-native-wagmi-charts";
 import styles from "./styles";
 import CoinDetailHeader from "./../../components/CoinDetail/Header";
 import CoinPriceInfo from "./../../components/CoinDetail/PriceInfo";
@@ -30,7 +31,7 @@ const filterDaysArray = [
   { filterDay: "365", filterText: "1y" },
   { filterDay: "max", filterText: "All" },
 ];
-export default function index() {
+export default function CoinDetail() {
   const [coin, setCoin] = useState(null);
   const [coinMarketData, setCoinMarketData] = useState(null);
   const [coinValue, setCoinValue] = useState("1");
@@ -61,8 +62,19 @@ export default function index() {
     fetchCoinData();
     fetchMarketCoinData(1);
   }, []);
+
+  const handlerSelectedRange = (selectedRangeValue) => {
+    setSelectedRange(selectedRangeValue);
+    fetchMarketCoinData(selectedRangeValue);
+  };
+
+  //fix rerender
+  const memoOnSelectedRangeChange = React.useCallback(
+    (range) => handlerSelectedRange(range),
+    []
+  );
+
   const screenWidth = Dimensions.get("window").width;
-  // Si la moneda dropeo al principio de las 24hs stroke=red : stroke=green
 
   if (isLoading || !coin || !coinMarketData) {
     return <ActivityIndicator size="large" />;
@@ -92,22 +104,21 @@ export default function index() {
     setCoinValue((floatValue / current_price.usd).toString());
   };
 
-  const handlerSelectedRange = (selectedRangeValue) => {
-    setSelectedRange(selectedRangeValue);
-    fetchMarketCoinData(selectedRangeValue);
-  };
   return (
-    <TouchableWithoutFeedback
+    <KeyboardAvoidingView
       style={styles.container}
-      onPress={Keyboard.dismiss}
-      accessible={false}
+      keyboardVerticalOffset={80}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <ChartPathProvider
+      {/* <ChartPathProvider
         data={{
           // points: prices.map((price) => ({ x: price[0], y: price[1] })),
           points: prices.map(([x, y]) => ({ x, y })),
           // smoothingStrategy: "bezier",
         }}
+      > */}
+      <LineChartProvider
+        data={prices.map(([timestamp, value]) => ({ timestamp, value }))}
       >
         <CoinDetailHeader
           coinId={id}
@@ -128,49 +139,50 @@ export default function index() {
               filterDay={day.filterDay}
               filterText={day.filterText}
               selectedRange={selectedRange}
-              setSelectedRange={handlerSelectedRange}
+              setSelectedRange={memoOnSelectedRangeChange}
+              // setSelectedRange={handlerSelectedRange}
             />
           ))}
         </View>
         {/* CHART FILTER END */}
         {/* CHART COMPONENT START */}
-        <View>
-          <ChartPath
-            height={screenWidth / 2}
-            stroke={chartChangedColor}
-            width={screenWidth}
-          />
-          <ChartDot style={{ backgroundColor: chartChangedColor }} />
-        </View>
+        <LineChart height={screenWidth / 2} width={screenWidth}>
+          <LineChart.Path color={chartChangedColor} />
+          <LineChart.CursorCrosshair color={chartChangedColor} />
+        </LineChart>
         {/* CHART COMPONENT END */}
         {/* PRICE CONVERTER CONTAINER START */}
-        <View style={{ flexDirection: "row", marginHorizontal: 10 }}>
-          {/* importante agregar el flex 1 tanto aca como en el text input para que en todas las pantallas se vea bien el width del border */}
-          <View style={{ flexDirection: "row", flex: 1 }}>
-            <Text style={{ color: "white", alignSelf: "center" }}>
-              {symbol.toUpperCase()}
-            </Text>
-            <TextInput
-              style={styles.input}
-              value={coinValue.toString()}
-              keyboardType="numeric"
-              // onChangeText={setCoinValue}
-              onChangeText={handleChangeCoinValue}
-            />
-          </View>
-          <View style={{ flexDirection: "row", flex: 1 }}>
-            <Text style={{ color: "white", alignSelf: "center" }}>USD</Text>
-            <TextInput
-              style={styles.input}
-              value={usdValue.toString()}
-              keyboardType="numeric"
-              // onChangeText={setUsdValue}
-              onChangeText={handleChangeUsdValue}
-            />
+        <View style={styles.priceConverterContainer}>
+          <Text style={styles.priceConverterTitle}>Price Converter</Text>
+          <View style={{ flexDirection: "row", marginHorizontal: 10 }}>
+            {/* importante agregar el flex 1 tanto aca como en el text input para que en todas las pantallas se vea bien el width del border */}
+            <View style={{ flexDirection: "row", flex: 1 }}>
+              <Text style={{ color: "white", alignSelf: "center" }}>
+                {symbol.toUpperCase()}
+              </Text>
+              <TextInput
+                style={styles.input}
+                value={coinValue.toString()}
+                keyboardType="numeric"
+                // onChangeText={setCoinValue}
+                onChangeText={handleChangeCoinValue}
+              />
+            </View>
+            <View style={{ flexDirection: "row", flex: 1 }}>
+              <Text style={{ color: "white", alignSelf: "center" }}>USD</Text>
+              <TextInput
+                style={styles.input}
+                value={usdValue.toString()}
+                keyboardType="numeric"
+                // onChangeText={setUsdValue}
+                onChangeText={handleChangeUsdValue}
+              />
+            </View>
           </View>
         </View>
         {/* PRICE CONVERTER CONTAINER END */}
-      </ChartPathProvider>
-    </TouchableWithoutFeedback>
+      </LineChartProvider>
+      {/* </ChartPathProvider> */}
+    </KeyboardAvoidingView>
   );
 }
