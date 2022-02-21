@@ -3,7 +3,7 @@ import { FlatList, View, Text, RefreshControl } from "react-native";
 import CoinCard from "./../../components/CoinCard";
 import { getMarketData } from "./../../services/requests";
 
-export default function index() {
+export default function HomeScreen() {
   const [coins, setCoins] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const fetchCoins = async (page) => {
@@ -41,12 +41,13 @@ export default function index() {
           fontFamily: "DriodSans",
         }}
       >
-        Cryptocurrency Prices by Market Cap
+        Top Assets
       </Text>
       <FlatList
         data={coins}
         renderItem={({ item }) => <CoinCard marketCoin={item} />}
         onEndReached={() => fetchCoins(coins.length / 50 + 1)}
+        keyExtractor={(item) => item.id}
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
