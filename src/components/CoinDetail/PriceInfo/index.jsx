@@ -3,10 +3,12 @@ import { View, Text } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import styles from "./styles";
 import { ChartYLabel } from "@rainbow-me/animated-charts";
-export default function index(props) {
+import { LineChart } from "react-native-wagmi-charts";
+export default function PriceInfo(props) {
   const { name, currentPrice, priceChangePercentage24h } = props;
+  // Si la moneda dropeo al principio de las 24hs stroke=red : stroke=green
   const percentageColor = priceChangePercentage24h < 0 ? "#ea3943" : "#16c784";
-  const formatCurrency = (value) => {
+  const formatCurrency = ({ value }) => {
     // Worklet for formatting data from the chart. It can be useful when your data is a timestamp or currency.
     "worklet";
     if (value === "") {
@@ -24,7 +26,8 @@ export default function index(props) {
     <View style={styles.priceContainer}>
       <View>
         <Text style={styles.coinName}>{name}</Text>
-        <ChartYLabel format={formatCurrency} style={styles.priceText} />
+        {/* <ChartYLabel format={formatCurrency} style={styles.priceText} /> */}
+        <LineChart.PriceText style={styles.priceText} format={formatCurrency} />
       </View>
       <View
         style={{
