@@ -27,7 +27,7 @@ This screen is a list of our assets where we can upload and remove them. It sho
 <img src="https://i.imgur.com/DRdkpiF.png" width="350"  />
 
 ### NEW ASSET
-On this screen is where we can add new assets, there is a list of all the available criptocurrency from API. Once we have selected one, we are allowed to add the amount of asset that we want to purchase.
+On this screen is where we can add new assets, there is a list of all the available criptocurrency from API. Once we have selected one, we are allowed to add the amount of the asset that we want to purchase.
 
 <img src="https://i.imgur.com/gFgOHOz.gif" width="350"  />
 
